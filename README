@@ -1,0 +1,51 @@
+WebLabyrinth - A simple tool that creates a maze of bogus web pages to 
+confuse web scanners. It's main goal is to delay and occupy malicious 
+scanners that scan websites in order for incident handlers to detected 
+and respond to them before damage is done.
+
+WebLabyrinth code Copyright (c) 2010, Ben Jackson and Mayhemic Labs -
+bbj@mayhemiclabs.com. All rights reserved.
+
+Dissociated Press functions based off of David Pascoe-Deslauriers' 
+<dpascoed@csiuo.com> dissociatedpress class. Copyright 2000-2009 
+David Pascoe-Deslauriers. All rights reserved.
+
+Original Dissociated Press code available at 
+http://www.csiuo.com/drupal/node/13
+
+PREREQUISITES
+
+* Apache
+* mod_rewrite
+* PHP
+
+SETUP AND CONFIGURATION
+
+Configuration is fairly straightforward. pop all the files in a web
+accessible directory and edit the config.inc.php to reflect the 
+directory name. If you installed it in /labyrinth, it should be all set. 
+You also need to create a .htaccess file in the same directory as the 
+installation. There is an example in EXAMPLE.htaccess, built with the
+assumption that you have WebLabyrinth installed in a web path called
+/labyrinth and the index.php file has not been renamed. The only two 
+variables in the .htaccess that should ever need to be changed is 
+RewriteBase which should be the web path that WebLabyrinth is installed
+in and RewriteRule which is the web path that the main index.php file
+is located. 
+
+NOTE ABOUT APACHE
+
+Please note that you may need to reconfigure apache to allow .htaccess
+files to control configuration options. This is done in the apache site's
+configuration file (/etc/apache2/sites-available/<your site here>). Below 
+is an example from my installation on a Debian server:
+
+<Directory /var/www/labyrinth>
+	Options Indexes FollowSymLinks MultiViews
+	AllowOverride FileInfo Options
+	Order allow,deny
+	allow from all
+</Directory>
+
+The "AllowOverride FileInfo Options" is the important bit. Remember to 
+restart Apache when you're done. 

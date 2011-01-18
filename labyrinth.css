@@ -1,0 +1,35 @@
+body {
+    color: #2F2F2F;
+    font-size: small;
+    font-family: arial, verdana, tahoma, sans-serif;
+}
+h1 {
+    size: 130%;
+    border-bottom: 1px solid #888;
+}
+h2 {
+    size: 120%;
+    border-bottom: 1px solid #888;
+}
+h3 {
+    size: 110%;
+}
+h4 {
+    size: 107%;
+    border-bottom: 1px solid #888;
+}
+h5 {
+    size: 105%;
+}
+h6 {
+    size: 102%;
+}
+a {
+    color: #39F;
+    text-decoration: none;
+}
+a:hover {
+    color: #00F;
+    text-decoration: underline;
+}
+
