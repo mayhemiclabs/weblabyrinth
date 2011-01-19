@@ -33,9 +33,21 @@
  * 
  */
 
+	global $config;
+
 	//Web Path where WebLabyrinth is installed
 	$config['web_path'] = '/labyrinth'; 
 
 	//Text file to generate text from
 	$config['corpus'] = 'alice.txt';
+
+	//Do we want to generate mailto: in addition to web links?
+	$config['email'] = 0;
+
+	//Domain to generate addresses to
+	$config['email_domain'] = '';
+
+	//Probability (out of 100) of links generated to be e-mail
+	$config['email_probability'] = 10;
+	
 ?>

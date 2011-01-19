@@ -34,14 +34,31 @@
  
  class labyrinth {
 
+	function make_seed(){
+		list($usec, $sec) = explode(' ', microtime());
+		return (float) $sec + ((float) $usec * 123456);
+	}
+
 	function processtext($text, $directory){
 
-		$rand = rand(0,100);
+		global $config;
 
-		if ($rand < 10){
+		mt_srand(labyrinth::make_seed());
+
+		$link = mt_rand(0,100);
+
+		if ($link < 10){
 			$text = trim($text);
-			$link = base64_encode(rand(0,100000000));
+			$link = base64_encode(mt_rand(0,100000000));
 			$link = str_replace('=','',$link);
+
+			if ($config['email']){
+				$email_link = mt_rand(0,100);
+				if ($email_link <= $config['email_probability']){
+					return '<a href="mailto:' . $link . '@' . $config['email_domain'] . '">' . $text . '</a> ';
+				}
+			}
+
 			return '<a href="' . $directory . '/' . $link . '">' . $text . '</a> ';
 		}else{
 			return "$text";
