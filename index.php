@@ -40,25 +40,21 @@ include_once('config.inc.php');
 include_once('labyrinth.inc.php');
 include_once('dissociated-press.inc.php');
 
-if(preg_match("/Google/",$_SERVER['HTTP_USER_AGENT'])){
+// Obviously, a search engine spider hitting this will be like an unstoppable
+// force striking an immovable object. If the user agent appears to be a 
+// search engine return a 404 error and serenade them with some Tom Petty.
+
+if(Labyrinth::CheckForSearchEngines($_SERVER['HTTP_USER_AGENT'])){
 	header("HTTP/1.0 404 Not Found");
-	print "o/~ Whatever you're looking for / Hey! Don't come around here no more... o/~";
+	print "o/~ Whatever you're looking for... / Hey! Don't come around here no more... o/~";
+	exit;
 }
 
-// Randomly generate an error just to "Keep it real" this was mainly done to fool w3af
-$error_chance = rand(0,100);
-
-if ($error_chance == 16){
-	header("HTTP/1.1 404 Not Found");
-}elseif ($error_chance == 23){
-	header("HTTP/1.1 403 Forbidden");
-}elseif ($error_chance == 42){
-	#Included just for the WTF Factor
-	header("HTTP/1.1 402 Payment Required");
-}
+// Randomly generate an error just to "Keep it real"
+// This was mainly done to fool w3af
+Labyrinth::SpinTheWheelOfErrors();
 
 // If index.php is in the request URI, lob it off. Otherwise, lob off the trailing slash.
-
 if(preg_match("/index.php/",$_SERVER['REQUEST_URI'])){	
 	$directory = dirname($_SERVER['REQUEST_URI']);
 }else{

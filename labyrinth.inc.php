@@ -32,18 +32,32 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
  
- class labyrinth {
+ class Labyrinth {
 
-	function make_seed(){
+	function CheckForSearchEngines($user_agent){
+		switch(true){
+			case preg_match("/Google/",$user_agent):
+			case preg_match("/Yandex/",$user_agent):
+			case preg_match("/Openfind/",$user_agent):
+			case preg_match("/msnbot/",$user_agent):
+			case preg_match("/Slurp/",$user_agent):
+			case preg_match("/Yahoo/",$user_agent):
+			case preg_match("/Architext/",$user_agent):
+				return true;
+				break;
+		}
+	}
+
+	function MakeSeed(){
 		list($usec, $sec) = explode(' ', microtime());
 		return (float) $sec + ((float) $usec * 123456);
 	}
 
-	function processtext($text, $directory){
+	function ProcessText($text, $directory){
 
 		global $config;
 
-		mt_srand(labyrinth::make_seed());
+		mt_srand(Labyrinth::MakeSeed());
 
 		$link = mt_rand(0,100);
 
@@ -65,6 +79,25 @@
 		}
 	}
 
+	function SpinTheWheelOfErrors(){
+		$error_chance = rand(0,100);
+
+		$error_string = false;
+
+		if ($error_chance == 16){
+			$error_string = "HTTP/1.1 404 Not Found";
+		}elseif ($error_chance == 23){
+			$error_string = "HTTP/1.1 403 Forbidden";
+		}elseif ($error_chance == 42){
+			#Included just for the WTF Factor
+			$error_string = "HTTP/1.1 402 Payment Required";
+		}
+
+		if ($error_string){
+			header($error_string);
+			exit;
+		}
+	}
 }
 ?>
 
