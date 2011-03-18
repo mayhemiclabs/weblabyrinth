@@ -8,7 +8,7 @@
  * Main web page that creates bogus links in order to entrap
  * web scanners.
  *
- * All code Copyright (c) 2010, Ben Jackson and Mayhemic Labs - 
+ * All code Copyright (c) 2010-2011, Ben Jackson and Mayhemic Labs - 
  * bbj@mayhemiclabs.com. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,11 +40,13 @@ include_once('config.inc.php');
 include_once('labyrinth.inc.php');
 include_once('dissociated-press.inc.php');
 
+$labyrinth_handle = new Labyrinth($_SERVER['REMOTE_ADDR'],$_SERVER['HTTP_USER_AGENT']);
+
 // Obviously, a search engine spider hitting this will be like an unstoppable
 // force striking an immovable object. If the user agent appears to be a 
 // search engine return a 404 error and serenade them with some Tom Petty.
 
-if(Labyrinth::CheckForSearchEngines($_SERVER['HTTP_USER_AGENT'])){
+if($labyrinth_handle->CheckForSearchEngines()){
 	header("HTTP/1.0 404 Not Found");
 	print "o/~ Whatever you're looking for... / Hey! Don't come around here no more... o/~";
 	exit;
@@ -52,7 +54,7 @@ if(Labyrinth::CheckForSearchEngines($_SERVER['HTTP_USER_AGENT'])){
 
 // Randomly generate an error just to "Keep it real"
 // This was mainly done to fool w3af
-Labyrinth::SpinTheWheelOfErrors();
+$labyrinth_handle->SpinTheWheelOfErrors();
 
 // If index.php is in the request URI, lob it off. Otherwise, lob off the trailing slash.
 if(preg_match("/index.php/",$_SERVER['REQUEST_URI'])){	
@@ -62,6 +64,17 @@ if(preg_match("/index.php/",$_SERVER['REQUEST_URI'])){
 }
 
 
+// Alert
+$base_level = sizeof(explode('/',rtrim($config['web_path'],'/')));
+$uri_level = sizeof(explode('/',$directory)); 
+
+//Log the crawler to the database
+$labyrinth_handle->LogCrawler();
+
+if (($uri_level - $base_level) >= $config['alert_levels_deep']){
+	$labyrinth_handle->GenerateAlert();
+}
+
 // Read the text into a variable for processing by the dissociated press class.
 $fh = fopen($config['corpus'], 'r');
 $corpus = fread($fh, filesize($config['corpus']));
@@ -69,7 +82,6 @@ fclose($fh);
 
 ?>
 
-<html>
 <link rel="stylesheet" type="text/css" href="<?php print $config['web_path']; ?>/labyrinth.css">
 <title><?php print basename($_SERVER['REQUEST_URI']); ?></title>
 <body>

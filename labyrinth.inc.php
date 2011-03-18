@@ -6,12 +6,12 @@
  * Functions for creating a web page with bogus links in order to entrap
  * web scanners.
  *
- * All code Copyright (c) 2010, Ben Jackson and Mayhemic Labs - 
+ * All code Copyright (c) 2010-2011, Ben Jackson and Mayhemic Labs - 
  * bbj@mayhemiclabs.com. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *     * Redistributions of source code must retain the above copyright
+ *     * Redistributions of source code mustu retain the above copyright
  *       notice, this list of conditions and the following disclaimer.
  *     * Redistributions in binary form must reproduce the above copyright
  *       notice, this list of conditions and the following disclaimer in the
@@ -32,17 +32,34 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
  
- class Labyrinth {
+class Labyrinth {
+	
+	var $dbhandle;
+	var $crawler_info;
+	var $crawler_ip;
+	var $crawler_useragent;
 
-	function CheckForSearchEngines($user_agent){
+	public function Labyrinth($ip,$useragent){
+		global $config;
+		mt_srand(Labyrinth::MakeSeed());
+
+		$this->crawler_ip = $ip;
+		$this->crawler_useragent = $useragent;
+
+		$this->dbhandle = new SQLiteDatabase($config['tracking_db']);
+		$this->crawler_info = $this->dbhandle->query("SELECT crawler_ip FROM crawlers WHERE crawler_ip='$ip' AND crawler_useragent='$useragent'");
+	}
+
+	function CheckForSearchEngines(){
 		switch(true){
-			case preg_match("/Google/",$user_agent):
-			case preg_match("/Yandex/",$user_agent):
-			case preg_match("/Openfind/",$user_agent):
-			case preg_match("/msnbot/",$user_agent):
-			case preg_match("/Slurp/",$user_agent):
-			case preg_match("/Yahoo/",$user_agent):
-			case preg_match("/Architext/",$user_agent):
+			case preg_match("/Google/",$this->crawler_useragent):
+			case preg_match("/Yandex/",$this->crawler_useragent):
+			case preg_match("/Openfind/",$this->crawler_useragent):
+			case preg_match("/msnbot/",$this->crawler_useragent):
+			case preg_match("/bingbot/",$this->crawler_useragent):
+			case preg_match("/Slurp/",$this->crawler_useragent):
+			case preg_match("/Yahoo/",$this->crawler_useragent):
+			case preg_match("/Architext/",$this->crawler_useragent):
 				return true;
 				break;
 		}
@@ -56,8 +73,6 @@
 	function ProcessText($text, $directory){
 
 		global $config;
-
-		mt_srand(Labyrinth::MakeSeed());
 
 		$link = mt_rand(0,100);
 
@@ -96,6 +111,35 @@
 		if ($error_string){
 			header($error_string);
 			exit;
+		}
+	}
+
+	function GenerateAlert(){
+		global $config;
+
+		//Have we seen this crawler recently?		
+		$last_seen_query = $this->dbhandle->query("SELECT strftime('%s',datetime('now','localtime')) - strftime('%s',last_alert) FROM crawlers");
+		
+		$time = $last_seen_query->fetchSingle();
+
+		if (($time == 0) || ($time > 3600)){
+			if ($config['alert_snort']){
+				print $config['alert_snort_text'] . ' ';
+			}
+
+			if ($config['alert_email']){
+				mail($config['alert_email_address'], "WebLabyrinth Alert - " . $this->crawler_ip, "We've got a live one!\n\nIP: "  . $this->crawler_ip . "User Agent: " . $this->crawler_useragent);
+			}
+		}
+	}
+
+	function LogCrawler(){
+
+		if($this->crawler_info->numRows() > 0){
+			$this->dbhandle->query("UPDATE crawlers SET last_seen = datetime('now','localtime'), num_hits=num_hits+1 WHERE crawler_ip='" . $this->crawler_ip . "' AND crawler_useragent='" . $this->crawler_useragent . "'");
+		}else{
+			$crawler_rdns = gethostbyaddr($crawler_ip);
+			$this->dbhandle->query("INSERT INTO crawlers(crawler_ip, crawler_rdns, crawler_useragent, first_seen, last_seen, num_hits) VALUES('" . $this->crawler_ip . "', '$crawler_rdns', '" . $this->crawler_useragent . "', datetime('now','localtime'), datetime('now','localtime'), 1)");
 		}
 	}
 }

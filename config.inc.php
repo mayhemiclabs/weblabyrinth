@@ -6,7 +6,7 @@
  *
  * Configuration options for WebLabyrinth
  *
- * All code Copyright (c) 2010, Ben Jackson and Mayhemic Labs - 
+ * All code Copyright (c) 2010-2011, Ben Jackson and Mayhemic Labs - 
  * bbj@mayhemiclabs.com. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -42,12 +42,28 @@
 	$config['corpus'] = 'alice.txt';
 
 	//Do we want to generate mailto: in addition to web links?
-	$config['email'] = 0;
+	$config['email'] = false;
 
 	//Domain to generate addresses to
 	$config['email_domain'] = '';
 
 	//Probability (out of 100) of links generated to be e-mail
 	$config['email_probability'] = 10;
-	
+
+	//Database to track crawlers
+	$config['tracking_db'] = '/opt/weblabyrinth/weblabyrinth.db';
+
+	//Do we want to generate email alerts?
+	$config['alert_email'] = true;
+
+	//e-mail to send alerts to
+	$config['alert_email_address'] = 'root@localhost';
+		
+	//Do we want to try to cause a snort alert?
+	$config['alert_snort'] = true;
+
+	//Text to trigger snort
+	$config['alert_snort_text'] = 'honorificabilitudinitatibus';
+
+	$config['alert_levels_deep'] = 3;
 ?>
