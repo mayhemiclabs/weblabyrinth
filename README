@@ -19,20 +19,36 @@ PREREQUISITES
 * mod_rewrite
 * PHP
 * sqlite
+* PHP sqlite extension
 
 SETUP AND CONFIGURATION
 
-Configuration is fairly straightforward. pop all the files in a web
-accessible directory and edit the config.inc.php to reflect the 
-directory name. If you installed it in /labyrinth, it should be all set. 
-You also need to create a .htaccess file in the same directory as the 
-installation. There is an example in EXAMPLE.htaccess, built with the
-assumption that you have WebLabyrinth installed in a web path called
-/labyrinth and the index.php file has not been renamed. The only two 
+Configuration is broken up into two parts, setting up the web 
+application, and configuring the database. First, copy all the files in 
+a web accessible directory and edit the config.inc.php to reflect the 
+directory name. If you installed it as /labyrinth, it should be all set. 
+
+Next, you also need to create a .htaccess file in the same directory 
+as the installation. There is an example in EXAMPLE.htaccess, built 
+with theassumption that you have WebLabyrinth installed in a web path 
+called /labyrinth and the index.php file has not been renamed. The only two 
 variables in the .htaccess that should ever need to be changed is 
 RewriteBase which should be the web path that WebLabyrinth is installed
 in and RewriteRule which is the web path that the main index.php file
 is located. 
+
+Finally, you need to configure the database. This database should be
+installed in a non web accessible directory. The directory should both 
+readable and writeable by the Apache user. The SQL script to create the
+database is labyrinth.sql. The following commands do this on a Debian 
+system:
+
+ 	mkdir /opt/weblabyrinth/labyrinth.db
+ 	cat labyrinth.sql | sqlite /opt/weblabyrinth/labyrinth.db
+	chown www-data:www-data /opt/weblabyrinth
+
+Once the database is created, edit the config.inc.php 'tracking_db'
+variable to point to your freshly created database.
 
 NOTE ABOUT APACHE
 
