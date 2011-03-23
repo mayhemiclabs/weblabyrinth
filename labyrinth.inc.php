@@ -128,8 +128,10 @@ class Labyrinth {
 			}
 
 			if ($config['alert_email']){
-				mail($config['alert_email_address'], "WebLabyrinth Alert - " . $this->crawler_ip, "We've got a live one!\n\nIP: "  . $this->crawler_ip . "User Agent: " . $this->crawler_useragent);
+				mail($config['alert_email_address'], "WebLabyrinth Alert - " . $this->crawler_ip, "We've got a live one!\n\nIP: "  . $this->crawler_ip . "\nUser Agent: " . $this->crawler_useragent);
 			}
+
+			$last_alert_query = $this->dbhandle->query("UPDATE crawlers SET last_alert=datetime('now','localtime') WHERE crawler_ip='" . $this->crawler_ip . "' AND crawler_useragent='" . $this->crawler_useragent . "'");
 		}
 	}
 

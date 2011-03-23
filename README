@@ -20,6 +20,7 @@ PREREQUISITES
 * PHP
 * sqlite
 * PHP sqlite extension
+* PHP mail() support
 
 SETUP AND CONFIGURATION
 
@@ -49,6 +50,17 @@ system:
 
 Once the database is created, edit the config.inc.php 'tracking_db'
 variable to point to your freshly created database.
+
+ALERTING
+
+One of the new features (as of the 0.3 branch) is the ability to generate 
+alerts if a crawler reaches a certain level. The two ways weblabyrinth can
+do this is by generating an e-mail or by generating text that an IDS system
+can trigger on. All of these options are controlled in the config.inc.php
+file. If you use snort, the following rule should generate an alert if the 
+word used by default is found.
+
+alert tcp any 80 -> any any (content:"honorificabilitudinitatibus"; msg: "WebLabyrinth alert keyword detected";)
 
 NOTE ABOUT APACHE
 
