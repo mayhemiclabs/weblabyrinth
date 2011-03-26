@@ -41,7 +41,7 @@ is located.
 Finally, you need to configure the database. This database should be
 installed in a non web accessible directory. The directory should both 
 readable and writeable by the Apache user. The SQL script to create the
-database is labyrinth.sql. The following commands do this on a Debian 
+database is labyrinth.sql. The following commands do this on my (Debian) 
 system:
 
  	mkdir /opt/weblabyrinth/labyrinth.db
@@ -61,6 +61,10 @@ file. If you use snort, the following rule should generate an alert if the
 word used by default is found.
 
 alert tcp any 80 -> any any (content:"honorificabilitudinitatibus"; msg: "WebLabyrinth alert keyword detected";)
+
+By default the system will generate an alert if the crawlers get three 
+levels deep within the labyrinth. The system will generate the alert maximum
+once an hour for an ongoing scan. 
 
 NOTE ABOUT APACHE
 
