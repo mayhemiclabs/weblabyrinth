@@ -65,5 +65,6 @@
 	//Text to trigger snort
 	$config['alert_snort_text'] = 'honorificabilitudinitatibus';
 
+	//How many levels deep do we want to wait before we trigger an alert?
 	$config['alert_levels_deep'] = 3;
 ?>
