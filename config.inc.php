@@ -34,37 +34,45 @@
  */
 
 	global $config;
+	$config = array(
+		//Web Path where WebLabyrinth is installed
+		'web_path' => '/labyrinth',
 
-	//Web Path where WebLabyrinth is installed
-	$config['web_path'] = '/labyrinth'; 
+		//Text file to generate text from
+		'corpus' => 'alice.txt',
 
-	//Text file to generate text from
-	$config['corpus'] = 'alice.txt';
+		//Database to track crawlers
+		'tracking_db' => '/opt/weblabyrinth/weblabyrinth.db',
 
-	//Do we want to generate mailto: in addition to web links?
-	$config['email'] = false;
+		'bogus_email' => array(
+			//Do we want to generate mailto: in addition to web links?
+			'enabled' => 'false',
 
-	//Domain to generate addresses to
-	$config['email_domain'] = '';
+			//Domain to generate addresses to
+			'domain' => '',
 
-	//Probability (out of 100) of links generated to be e-mail
-	$config['email_probability'] = 10;
+			//Probability (out of 100) of links generated to be e-mail
+			'probability' => 10,
+		),
 
-	//Database to track crawlers
-	$config['tracking_db'] = '/opt/weblabyrinth/weblabyrinth.db';
+		//How many levels deep do we want to wait before we trigger an alert?
+		'alert_levels_deep' => 3,
 
-	//Do we want to generate email alerts?
-	$config['alert_email'] = true;
 
-	//e-mail to send alerts to
-	$config['alert_email_address'] = 'root@localhost';
-		
-	//Do we want to try to cause a snort alert?
-	$config['alert_snort'] = true;
+		'alert_email' => array(
+			//Do we want to generate email alerts?
+			'enabled' => 'true',
 
-	//Text to trigger snort
-	$config['alert_snort_text'] = 'honorificabilitudinitatibus';
+			//e-mail to send alerts to
+			'address' => 'root@localhost'
+		),
 
-	//How many levels deep do we want to wait before we trigger an alert?
-	$config['alert_levels_deep'] = 3;
+		'alert_ids' => array(
+			//Do we want to try to cause an IDS alert?
+			'enabled' => 'true',
+
+			//Text to trigger IDS alert
+			'text' => 'honorificabilitudinitatibus'
+		)
+	);
 ?>

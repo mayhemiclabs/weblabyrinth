@@ -81,10 +81,10 @@ class Labyrinth {
 			$link = base64_encode(mt_rand(0,100000000));
 			$link = str_replace('=','',$link);
 
-			if ($config['email']){
+			if ($config['bogus_email']['enabled']){
 				$email_link = mt_rand(0,100);
-				if ($email_link <= $config['email_probability']){
-					return '<a href="mailto:' . $link . '@' . $config['email_domain'] . '">' . $text . '</a> ';
+				if ($email_link <= $config['bogus_email']['probability']){
+					return '<a href="mailto:' . $link . '@' . $config['bogus_email']['domain'] . '">' . $text . '</a> ';
 				}
 			}
 
@@ -123,12 +123,12 @@ class Labyrinth {
 		$time = $last_seen_query->fetchSingle();
 
 		if (($time == 0) || ($time > 3600)){
-			if ($config['alert_snort']){
-				print $config['alert_snort_text'] . ' ';
+			if ($config['alert_ids']['enabled']){
+				print $config['alert_ids']['text'] . ' ';
 			}
 
-			if ($config['alert_email']){
-				mail($config['alert_email_address'], "WebLabyrinth Alert - " . $this->crawler_ip, "We've got a live one!\n\nIP: "  . $this->crawler_ip . "\nUser Agent: " . $this->crawler_useragent);
+			if ($config['alert_email']['enabled']){
+				mail($config['alert_email']['address'], "WebLabyrinth Alert - " . $this->crawler_ip, "We've got a live one!\n\nIP: "  . $this->crawler_ip . "\nUser Agent: " . $this->crawler_useragent);
 			}
 
 			$last_alert_query = $this->dbhandle->query("UPDATE crawlers SET last_alert=datetime('now','localtime') WHERE crawler_ip='" . $this->crawler_ip . "' AND crawler_useragent='" . $this->crawler_useragent . "'");
