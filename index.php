@@ -72,7 +72,7 @@ $uri_level = sizeof(explode('/',$directory));
 $labyrinth_handle->LogCrawler();
 
 if (($uri_level - $base_level) >= $config['alert_levels_deep']){
-	$labyrinth_handle->GenerateAlert();
+	$labyrinth_handle->GenerateAlert("Crawler Ensnared!");
 }
 
 // Read the text into a variable for processing by the dissociated press class.

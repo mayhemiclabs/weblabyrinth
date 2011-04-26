@@ -39,6 +39,8 @@ class Labyrinth {
 	var $crawler_ip;
 	var $crawler_useragent;
 
+	public $new;
+
 	public function Labyrinth($ip,$useragent){
 		global $config;
 		mt_srand(Labyrinth::MakeSeed());
@@ -114,13 +116,16 @@ class Labyrinth {
 		}
 	}
 
-	function GenerateAlert(){
+	function GenerateAlert($message="We got a live one!"){
 		global $config;
 
 		//Have we seen this crawler recently?		
-		$last_seen_query = $this->dbhandle->query("SELECT strftime('%s',datetime('now','localtime')) - strftime('%s',last_alert) FROM crawlers");
+		$last_seen_query = $this->dbhandle->query("SELECT strftime('%s',datetime('now','localtime')) - strftime('%s',last_alert) FROM crawlers WHERE crawler_ip='" . $this->crawler_ip . "' AND crawler_useragent='" . $this->crawler_useragent . "'") or die(sqlite_error_string($this->dbhandle->lastError()));;
 		
 		$time = $last_seen_query->fetchSingle();
+
+
+
 
 		if (($time == 0) || ($time > 3600)){
 			if ($config['alert_ids']['enabled']){
@@ -128,7 +133,13 @@ class Labyrinth {
 			}
 
 			if ($config['alert_email']['enabled']){
-				mail($config['alert_email']['address'], "WebLabyrinth Alert - " . $this->crawler_ip, "We've got a live one!\n\nIP: "  . $this->crawler_ip . "\nUser Agent: " . $this->crawler_useragent);
+				mail($config['alert_email']['address'], "WebLabyrinth Alert - " . $this->crawler_ip, "$message\n\nIP: "  . $this->crawler_ip . "\nUser Agent: " . $this->crawler_useragent);
+			}
+
+			if ($config['alert_syslog']['enabled']){
+				openlog("weblabyrinth", LOG_PID, LOG_LOCAL0);
+				syslog(LOG_WARNING, "ALERT, message=[$message], src_ip=[{$_SERVER['REMOTE_ADDR']}], user_agent=[{$_SERVER['HTTP_USER_AGENT']}]");
+				closelog();
 			}
 
 			$last_alert_query = $this->dbhandle->query("UPDATE crawlers SET last_alert=datetime('now','localtime') WHERE crawler_ip='" . $this->crawler_ip . "' AND crawler_useragent='" . $this->crawler_useragent . "'");
@@ -136,12 +147,19 @@ class Labyrinth {
 	}
 
 	function LogCrawler(){
+		global $config;
 
 		if($this->crawler_info->numRows() > 0){
 			$this->dbhandle->query("UPDATE crawlers SET last_seen = datetime('now','localtime'), num_hits=num_hits+1 WHERE crawler_ip='" . $this->crawler_ip . "' AND crawler_useragent='" . $this->crawler_useragent . "'");
 		}else{
-			$crawler_rdns = gethostbyaddr($crawler_ip);
+			$crawler_rdns = gethostbyaddr($this->crawler_ip);
 			$this->dbhandle->query("INSERT INTO crawlers(crawler_ip, crawler_rdns, crawler_useragent, first_seen, last_seen, num_hits) VALUES('" . $this->crawler_ip . "', '$crawler_rdns', '" . $this->crawler_useragent . "', datetime('now','localtime'), datetime('now','localtime'), 1)");
+
+			$this->new = true;
+			if($config['alert_on_new']){
+				$this->GenerateAlert("New host logged!");
+			}
+
 		}
 	}
 }

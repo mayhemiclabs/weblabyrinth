@@ -42,7 +42,7 @@
 		'corpus' => 'alice.txt',
 
 		//Database to track crawlers
-		'tracking_db' => '/opt/weblabyrinth/weblabyrinth.db',
+		'tracking_db' => '/opt/weblabyrinth/labyrinth.db',
 
 		'bogus_email' => array(
 			//Do we want to generate mailto: in addition to web links?
@@ -58,6 +58,14 @@
 		//How many levels deep do we want to wait before we trigger an alert?
 		'alert_levels_deep' => 3,
 
+		//Do we want generate an alert if a host we have never logged before
+		//connects to the labyrinth for the first time?
+		'alert_on_new' => true,
+		
+		'alert_syslog' => array(
+			//Do we want to generate syslog alerts?
+			'enabled' => 'true'
+		),
 
 		'alert_email' => array(
 			//Do we want to generate email alerts?

@@ -44,9 +44,9 @@ readable and writeable by the Apache user. The SQL script to create the
 database is labyrinth.sql. The following commands do this on my (Debian) 
 system:
 
- 	mkdir /opt/weblabyrinth/labyrinth.db
+ 	mkdir /opt/weblabyrinth/
  	cat labyrinth.sql | sqlite /opt/weblabyrinth/labyrinth.db
-	chown www-data:www-data /opt/weblabyrinth
+	chown -R www-data:www-data /opt/weblabyrinth
 
 Once the database is created, edit the config.inc.php 'tracking_db'
 variable to point to your freshly created database.
