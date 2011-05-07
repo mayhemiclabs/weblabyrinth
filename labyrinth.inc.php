@@ -50,7 +50,7 @@ class Labyrinth {
 		$this->crawler_ip = sqlite_escape_string($ip);
 		$this->crawler_useragent = sqlite_escape_string($useragent);
 
-		$this->crawler_info = $this->dbhandle->query("SELECT crawler_ip FROM crawlers WHERE crawler_ip='$this->ip' AND crawler_useragent='$this->useragent'");
+		$this->crawler_info = $this->dbhandle->query("SELECT crawler_ip FROM crawlers WHERE crawler_ip='" . $this->crawler_ip ."' AND crawler_useragent='" . $this->crawler_useragent . "'");
 	}
 
 	function CheckForSearchEngines(){
