@@ -45,11 +45,12 @@ class Labyrinth {
 		global $config;
 		mt_srand(Labyrinth::MakeSeed());
 
-		$this->crawler_ip = $ip;
-		$this->crawler_useragent = $useragent;
-
 		$this->dbhandle = new SQLiteDatabase($config['tracking_db']);
-		$this->crawler_info = $this->dbhandle->query("SELECT crawler_ip FROM crawlers WHERE crawler_ip='$ip' AND crawler_useragent='$useragent'");
+
+		$this->crawler_ip = sqlite_escape_string($ip);
+		$this->crawler_useragent = sqlite_escape_string($useragent);
+
+		$this->crawler_info = $this->dbhandle->query("SELECT crawler_ip FROM crawlers WHERE crawler_ip='$this->ip' AND crawler_useragent='$this->useragent'");
 	}
 
 	function CheckForSearchEngines(){
