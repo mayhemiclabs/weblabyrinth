@@ -73,29 +73,6 @@ class Labyrinth {
 		return (float) $sec + ((float) $usec * 123456);
 	}
 
-	function ProcessText($text, $directory){
-
-		global $config;
-
-		$link = mt_rand(0,100);
-
-		if ($link < 10){
-			$text = trim($text);
-			$link = base64_encode(mt_rand(0,100000000));
-			$link = str_replace('=','',$link);
-
-			if ($config['bogus_email']['enabled']){
-				$email_link = mt_rand(0,100);
-				if ($email_link <= $config['bogus_email']['probability']){
-					return '<a href="mailto:' . $link . '@' . $config['bogus_email']['domain'] . '">' . $text . '</a> ';
-				}
-			}
-
-			return '<a href="' . $directory . '/' . $link . '">' . $text . '</a> ';
-		}else{
-			return "$text";
-		}
-	}
 
 	function SpinTheWheelOfErrors(){
 		$error_chance = rand(0,100);
