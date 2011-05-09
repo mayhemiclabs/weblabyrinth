@@ -43,7 +43,7 @@ class Labyrinth {
 
 	public function Labyrinth($ip,$useragent){
 		global $config;
-		mt_srand(Labyrinth::MakeSeed());
+		mt_srand($this->MakeSeed());
 
 		$this->dbhandle = new SQLiteDatabase($config['tracking_db']);
 
@@ -124,9 +124,6 @@ class Labyrinth {
 		$last_seen_query = $this->dbhandle->query("SELECT strftime('%s',datetime('now','localtime')) - strftime('%s',last_alert) FROM crawlers WHERE crawler_ip='" . $this->crawler_ip . "' AND crawler_useragent='" . $this->crawler_useragent . "'") or die(sqlite_error_string($this->dbhandle->lastError()));;
 		
 		$time = $last_seen_query->fetchSingle();
-
-
-
 
 		if (($time == 0) || ($time > 3600)){
 			if ($config['alert_ids']['enabled']){

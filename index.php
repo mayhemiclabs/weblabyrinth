@@ -87,7 +87,8 @@ fclose($fh);
 <body>
 	<?php 
 		// Print the text with links
-		print dissociatedpress::dissociate($corpus, $directory); 
+		$dissociated_press = new dissociatedpress;
+		print $dissociated_press->dissociate($corpus, $directory);
 	?>
 </body>
 </html>

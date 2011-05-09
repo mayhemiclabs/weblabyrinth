@@ -73,7 +73,7 @@ function dissociate ($str, $url_dir, $randomstart = true, $groupsize = 4, $max =
 	if (!$randomstart) {
 		for ($n = 0; $n < $groupsize; $n++){
 			array_push($lastmatch,$tokens[$n]);
-			$res = dissociatedpress::cleanToken($tokens[$n],$capital);
+			$res = $this->cleanToken($tokens[$n],$capital);
 			$return .= $res[0];
 			$capital = $res[1];
 		}
@@ -93,12 +93,12 @@ function dissociate ($str, $url_dir, $randomstart = true, $groupsize = 4, $max =
 			$lastmatch = array();
 			for ($n = 0; $n < $groupsize; $n++){
 				array_push($lastmatch,$tokens[$loc+$n]);
-				$res = dissociatedpress::cleanToken($tokens[$loc+$n],$capital);
+				$res = $this->cleanToken($tokens[$loc+$n],$capital);
 				$return .= labyrinth::processtext($res[0],$url_dir);
 				$capital = $res[1];
 			}
 		} else {
-			$chains = dissociatedpress::findChains($tokens, $lastmatch);
+			$chains = $this->findChains($tokens, $lastmatch);
 			$lastmatch = array();
  
 			// If there aren't enough chains, start randomly next time (avoid getting caught in loops)
@@ -106,7 +106,7 @@ function dissociate ($str, $url_dir, $randomstart = true, $groupsize = 4, $max =
 				$loc = $chains[rand(0, sizeof($chains)-1)];
 				for ($n = 0; $n < $groupsize; $n++){
 					array_push($lastmatch,$tokens[$loc+$n]);
-					$res = dissociatedpress::cleanToken($tokens[$loc+$n],$capital);
+					$res = $this->cleanToken($tokens[$loc+$n],$capital);
 					$return .= labyrinth::processtext($res[0],$url_dir);
 					$capital = $res[1];
 				}
