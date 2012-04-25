@@ -6,7 +6,7 @@
  *
  * Configuration options for WebLabyrinth
  *
- * All code Copyright (c) 2010-2011, Ben Jackson and Mayhemic Labs - 
+ * All code Copyright (c) 2010-2012, Ben Jackson and Mayhemic Labs - 
  * bbj@mayhemiclabs.com. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without

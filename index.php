@@ -8,7 +8,7 @@
  * Main web page that creates bogus links in order to entrap
  * web scanners.
  *
- * All code Copyright (c) 2010-2011, Ben Jackson and Mayhemic Labs - 
+ * All code Copyright (c) 2010-2012, Ben Jackson and Mayhemic Labs - 
  * bbj@mayhemiclabs.com. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
