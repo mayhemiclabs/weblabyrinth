@@ -1,1 +1,1 @@
-CREATE TABLE crawlers (crawler_ip TEXT, crawler_rdns TEXT, crawler_useragent TEXT, first_seen DATETIME, last_seen DATETIME, last_alert DATETIME, num_hits INTEGER);
+CREATE TABLE crawlers ( crawler_ip TEXT, crawler_rdns TEXT, crawler_useragent TEXT, crawler_accept TEXT, crawler_accept_language TEXT, crawler_accept_encoding TEXT, crawler_dnt TEXT, first_seen DATETIME, last_seen DATETIME, last_alert DATETIME, num_hits INTEGER);

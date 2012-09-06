@@ -40,7 +40,26 @@ include_once('config.inc.php');
 include_once('labyrinth.inc.php');
 include_once('dissociated-press.inc.php');
 
-$labyrinth_handle = new Labyrinth($_SERVER['REMOTE_ADDR'],$_SERVER['HTTP_USER_AGENT']);
+//$_SERVER['REMOTE_ADDR']
+//$_SERVER['HTTP_USER_AGENT']
+//$_SERVER['HTTP_ACCEPT']
+//$_SERVER['HTTP_ACCEPT_LANGUAGE']
+//$_SERVER['HTTP_ACCEPT_ENCODING']
+//$_SERVER['HTTP_DNT']
+
+if (!isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+	$_SERVER['HTTP_ACCEPT_LANGUAGE'] = "";
+}
+
+if (!isset($_SERVER['HTTP_ACCEPT_ENCODING'])) {
+	$_SERVER['HTTP_ACCEPT_ENCODING'] = "";
+}
+
+if (!isset($_SERVER['HTTP_DNT'])) {
+	$_SERVER['HTTP_DNT'] = "";
+}
+
+$labyrinth_handle = new Labyrinth($_SERVER['REMOTE_ADDR'],$_SERVER['HTTP_USER_AGENT'],$_SERVER['HTTP_ACCEPT'],$_SERVER['HTTP_ACCEPT_LANGUAGE'],$_SERVER['HTTP_ACCEPT_ENCODING'],$_SERVER['HTTP_DNT']);
 
 // Obviously, a search engine spider hitting this will be like an unstoppable
 // force striking an immovable object. If the user agent appears to be a 
