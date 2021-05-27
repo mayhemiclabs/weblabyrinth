@@ -102,7 +102,7 @@ fclose($fh);
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php print $config['web_path']; ?>/labyrinth.css">
-<title><?php print basename($_SERVER['REQUEST_URI']); ?></title>
+<title><?php print htmlentities(basename($_SERVER['REQUEST_URI'])); ?></title>
 <body>
 	<?php 
 		// Print the text with links

@@ -178,7 +178,7 @@ class dissociatedpress {
 				}
 			}
 
-			return '<a href="' . $directory . '/' . $link . '">' . $text . '</a> ';
+			return '<a href="' . htmlentities($directory) . '/' . $link . '">' . $text . '</a> ';
 		}else{
 			return "$text";
 		}
